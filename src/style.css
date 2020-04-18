@@ -1,0 +1,104 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  transition: background-color 200ms linear;
+}
+
+body.focus {
+  background: #e74c3c;
+}
+
+body.short-break {
+  background: #3498db;
+}
+
+body.long-break {
+  background: #27ae60;
+}
+
+button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  outline: none;
+  font: inherit;
+  cursor: pointer;
+  transition: opacity 100ms linear;
+}
+
+.indicators {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin-bottom: 60px;
+}
+
+.indicators-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#progress-ring,
+#progress-ring-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#progress-ring {
+  opacity: 0.5;
+}
+
+#progress-ring-background {
+  opacity: 0.1;
+}
+
+#remaining {
+  font-size: 56px;
+  color: #ffffff;
+  opacity: 0.5;
+  margin-bottom: -10px;
+}
+
+#play-pause-button {
+  width: 48px;
+  opacity: 0.4;
+}
+
+#play-pause-button:hover {
+  opacity: 0.6;
+}
+
+#play-pause-button img {
+  width: 100%;
+}
+
+.phase {
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 15px 25px;
+  opacity: 0.3;
+  border-radius: 16px;
+  width: 150px;
+  margin: 0 10px;
+}
+
+.phase.active,
+.phase:hover {
+  opacity: 0.65;
+}

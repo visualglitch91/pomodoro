@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "rm -rf dist && parcel build src/index.html"
+  }
+}
