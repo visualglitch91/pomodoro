@@ -41,7 +41,7 @@ button {
   position: relative;
   width: 260px;
   height: 260px;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 
 .indicators-inner {
@@ -95,7 +95,7 @@ button {
   opacity: 0.3;
   border-radius: 16px;
   width: 150px;
-  margin: 0 10px;
+  margin: 10px;
 }
 
 .phase.active,
