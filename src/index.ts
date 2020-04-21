@@ -78,9 +78,12 @@ function main() {
 
   function render() {
     const { running, pomodoro } = store.state;
+    const timeRemaining = formatRemaining(pomodoro.remaining);
+
+    document.title = `(${running ? "▶" : "◼"} ${timeRemaining}) Smooth Tomato`;
 
     document.body.className = pomodoro.phase.toLowerCase();
-    remaining.textContent = formatRemaining(pomodoro.remaining);
+    remaining.textContent = timeRemaining;
 
     setActive(focusButton, pomodoro.phase === Phase.FOCUS);
     setActive(shotBreakButton, pomodoro.phase === Phase.SHORT_BREAK);
