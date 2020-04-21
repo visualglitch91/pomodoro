@@ -80,6 +80,7 @@ button {
   opacity: 0.4;
 }
 
+#play-pause-button:focus,
 #play-pause-button:hover {
   opacity: 0.6;
 }
@@ -117,6 +118,7 @@ button {
 }
 
 .phase.active,
+.phase:focus,
 .phase:hover {
   opacity: 0.65;
 }

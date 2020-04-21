@@ -131,13 +131,16 @@ function main() {
   }
 
   function skipTo(phase: Phase) {
-    return () =>
+    return (e: MouseEvent & { target: HTMLElement }) => {
+      playPauseButton.focus();
+
       store.setState({
         ...store.state,
         running: true,
         skipped: true,
         pomodoro: makePomodoroState(phase),
       });
+    };
   }
 
   function notify(state: State, prevState: State) {
@@ -157,11 +160,14 @@ function main() {
   focusButton.addEventListener("click", skipTo(Phase.FOCUS));
   shotBreakButton.addEventListener("click", skipTo(Phase.SHORT_BREAK));
   longBreakButton.addEventListener("click", skipTo(Phase.LONG_BREAK));
-  window.addEventListener("keydown", (e) => {
-    if (e.keyCode === 32) {
-      toggleRunning();
+  window.addEventListener(
+    "keydown",
+    (e: KeyboardEvent & { target: HTMLElement }) => {
+      if (e.keyCode === 32 && e.target.tagName !== "BUTTON") {
+        toggleRunning();
+      }
     }
-  });
+  );
 }
 
 Notification.requestPermission();
