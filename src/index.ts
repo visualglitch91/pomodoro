@@ -148,6 +148,11 @@ function main() {
   focusButton.addEventListener("click", skipTo(Phase.FOCUS));
   shotBreakButton.addEventListener("click", skipTo(Phase.SHORT_BREAK));
   longBreakButton.addEventListener("click", skipTo(Phase.LONG_BREAK));
+  window.addEventListener("keydown", (e) => {
+    if (e.keyCode === 32) {
+      toggleRunning();
+    }
+  });
 }
 
 Notification.requestPermission();
