@@ -18,6 +18,12 @@ const notificationMessages = {
   [Phase.LONG_BREAK]: "Time to do a long break!",
 };
 
+const themeColors = {
+  [Phase.FOCUS]: "#e74c3c",
+  [Phase.SHORT_BREAK]: "#3498db",
+  [Phase.LONG_BREAK]: "#27ae60",
+};
+
 interface State {
   running: boolean;
   skipped: boolean;
@@ -61,6 +67,7 @@ function main() {
   ].map(document.getElementById.bind(document));
 
   const tomatos = document.querySelectorAll(".tomatos i");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
 
   const progressRing = createProgressRing(
     document.getElementById("progress-ring"),
@@ -84,6 +91,8 @@ function main() {
 
     document.body.className = pomodoro.phase.toLowerCase();
     remaining.textContent = timeRemaining;
+
+    themeColor.setAttribute("content", themeColors[pomodoro.phase]);
 
     setActive(focusButton, pomodoro.phase === Phase.FOCUS);
     setActive(shotBreakButton, pomodoro.phase === Phase.SHORT_BREAK);
