@@ -60,6 +60,8 @@ function main() {
     "play-pause-button",
   ].map(document.getElementById.bind(document));
 
+  const tomatos = document.querySelectorAll(".tomatos i");
+
   const progressRing = createProgressRing(
     document.getElementById("progress-ring"),
     4,
@@ -83,6 +85,10 @@ function main() {
     setActive(focusButton, pomodoro.phase === Phase.FOCUS);
     setActive(shotBreakButton, pomodoro.phase === Phase.SHORT_BREAK);
     setActive(longBreakButton, pomodoro.phase === Phase.LONG_BREAK);
+
+    Array.from(tomatos).forEach((tomato: HTMLElement, index) => {
+      setActive(tomato, index === pomodoro.cycleCount);
+    });
 
     progressRing.setProgress(
       ((durations[pomodoro.phase] - pomodoro.remaining) /

@@ -26,14 +26,16 @@ export default function pomodoro(prevState: State): State {
   if (state.remaining < 0) {
     switch (state.phase) {
       case Phase.FOCUS:
-        state.cycleCount++;
         state.phase =
-          state.cycleCount === 4 ? Phase.LONG_BREAK : Phase.SHORT_BREAK;
+          state.cycleCount >= 3 ? Phase.LONG_BREAK : Phase.SHORT_BREAK;
         break;
       case Phase.LONG_BREAK:
+        state.phase = Phase.FOCUS;
         state.cycleCount = 0;
+        break;
       case Phase.SHORT_BREAK:
         state.phase = Phase.FOCUS;
+        state.cycleCount++;
         break;
     }
 

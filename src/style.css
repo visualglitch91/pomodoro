@@ -88,6 +88,24 @@ button {
   width: 100%;
 }
 
+.tomatos {
+  margin-bottom: 10px;
+}
+
+.tomatos i {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  background: #ffffff;
+  border-radius: 100%;
+  opacity: 0.15;
+  margin: 0 16px;
+}
+
+.tomatos i.active {
+  opacity: 0.5;
+}
+
 .phase {
   color: #ffffff;
   border: 2px solid #ffffff;
