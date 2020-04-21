@@ -1,5 +1,5 @@
 export default function progressRing(
-  node: HTMLElement,
+  node: Element,
   stroke: number,
   radius: number,
   percent: number

@@ -1,16 +1,7 @@
-import Store from "./store";
-import pomodoro, {
-  durations,
-  Phase,
-  makePomodoroState,
-  State as SomodoroState,
-} from "./pomodoro";
-import playIcon from "./play-icon.svg";
-import pauseIcon from "./pause-icon.svg";
+import { Phase } from "./lib/pomodoro";
+import createStore, { State } from "./store";
+import createView from "./view";
 import notificationSoundFile from "./notification-sound.ogg";
-import createProgressRing from "./progress-ring";
-
-const notificationSound = new Audio(notificationSoundFile);
 
 const notificationMessages = {
   [Phase.FOCUS]: "Time to focus!",
@@ -18,156 +9,45 @@ const notificationMessages = {
   [Phase.LONG_BREAK]: "Time to do a long break!",
 };
 
-const themeColors = {
-  [Phase.FOCUS]: "#e74c3c",
-  [Phase.SHORT_BREAK]: "#3498db",
-  [Phase.LONG_BREAK]: "#27ae60",
+const durations = {
+  [Phase.FOCUS]: 25 * 60,
+  [Phase.SHORT_BREAK]: 5 * 60,
+  [Phase.LONG_BREAK]: 15 * 60,
 };
 
-interface State {
-  running: boolean;
-  skipped: boolean;
-  pomodoro: SomodoroState;
-}
-
-const initialState: State = {
-  running: false,
-  skipped: false,
-  pomodoro: makePomodoroState(Phase.FOCUS),
-};
-
-function formatRemaining(remaining: number) {
-  const minutes = Math.floor(remaining / 60);
-  const seconds = remaining % 60;
-  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-}
-
-function setActive(node: HTMLElement, active: boolean) {
-  if (active) {
-    node.classList.add("active");
-  } else {
-    node.classList.remove("active");
-  }
-}
+const notificationSound = new Audio(notificationSoundFile);
 
 function main() {
-  const store = new Store(initialState);
-  const [
-    remaining,
-    focusButton,
-    shotBreakButton,
-    longBreakButton,
-    playPauseButton,
-  ]: HTMLElement[] = [
-    "remaining",
-    "focus-button",
-    "shot-break-button",
-    "long-break-button",
-    "play-pause-button",
-  ].map(document.getElementById.bind(document));
+  const store = createStore(durations);
 
-  const tomatos = document.querySelectorAll(".tomatos i");
-  const themeColor = document.querySelector('meta[name="theme-color"]');
+  const view = createView({
+    durations,
+    onPlayPauseButtonClick: () => store.toggleRunning(),
+    onFocusButtonClick: () => store.skip(Phase.FOCUS),
+    onShotBreakButtonClick: () => store.skip(Phase.SHORT_BREAK),
+    onLongBreakButtonClick: () => store.skip(Phase.LONG_BREAK),
+  });
 
-  const progressRing = createProgressRing(
-    document.getElementById("progress-ring"),
-    4,
-    130,
-    0
-  );
+  setInterval(() => store.tick(), 1000);
 
-  createProgressRing(
-    document.getElementById("progress-ring-background"),
-    4,
-    130,
-    100
-  );
+  view.render(store.state);
 
-  function render() {
-    const { running, pomodoro } = store.state;
-    const timeRemaining = formatRemaining(pomodoro.remaining);
+  store.subscribe(() => view.render(store.state));
 
-    document.title = `(${running ? "▶" : "◼"} ${timeRemaining}) Smooth Tomato`;
-
-    document.body.className = pomodoro.phase.toLowerCase();
-    remaining.textContent = timeRemaining;
-
-    themeColor.setAttribute("content", themeColors[pomodoro.phase]);
-
-    setActive(focusButton, pomodoro.phase === Phase.FOCUS);
-    setActive(shotBreakButton, pomodoro.phase === Phase.SHORT_BREAK);
-    setActive(longBreakButton, pomodoro.phase === Phase.LONG_BREAK);
-
-    Array.from(tomatos).forEach((tomato: HTMLElement, index) => {
-      setActive(tomato, index === pomodoro.cycleCount);
-    });
-
-    progressRing.setProgress(
-      ((durations[pomodoro.phase] - pomodoro.remaining) /
-        durations[pomodoro.phase]) *
-        100
-    );
-
-    (playPauseButton.firstChild as HTMLImageElement).src = running
-      ? pauseIcon
-      : playIcon;
-  }
-
-  function toggleRunning() {
-    store.setState({
-      ...store.state,
-      running: !store.state.running,
-    });
-  }
-
-  function tick() {
-    if (store.state.running) {
-      store.setState({
-        ...store.state,
-        skipped: false,
-        pomodoro: pomodoro(store.state.pomodoro),
-      });
-    }
-  }
-
-  function skipTo(phase: Phase) {
-    return (e: MouseEvent & { target: HTMLElement }) => {
-      playPauseButton.focus();
-
-      store.setState({
-        ...store.state,
-        running: true,
-        skipped: true,
-        pomodoro: makePomodoroState(phase),
-      });
-    };
-  }
-
-  function notify(state: State, prevState: State) {
+  store.subscribe((state, prevState) => {
     if (!state.skipped && state.pomodoro.phase !== prevState.pomodoro.phase) {
       new Notification(notificationMessages[state.pomodoro.phase]);
       notificationSound.play();
     }
-  }
+  });
 
-  render();
-  setInterval(tick, 1000);
+  window.addEventListener("keydown", (e) => {
+    const target = e.target as HTMLElement;
 
-  store.subscribe(render);
-  store.subscribe(notify);
-
-  playPauseButton.addEventListener("click", toggleRunning);
-  focusButton.addEventListener("click", skipTo(Phase.FOCUS));
-  shotBreakButton.addEventListener("click", skipTo(Phase.SHORT_BREAK));
-  longBreakButton.addEventListener("click", skipTo(Phase.LONG_BREAK));
-  window.addEventListener(
-    "keydown",
-    (e: KeyboardEvent & { target: HTMLElement }) => {
-      if (e.keyCode === 32 && e.target.tagName !== "BUTTON") {
-        toggleRunning();
-      }
+    if (e.keyCode === 32 && target.tagName !== "BUTTON") {
+      store.toggleRunning();
     }
-  );
+  });
 }
 
 Notification.requestPermission();

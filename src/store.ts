@@ -1,22 +1,56 @@
-export default class Store<T> {
-  public state: T;
-  private subscriptions = [];
+import Store from "./lib/store";
+import makePomodoro, {
+  Phase,
+  Durations,
+  State as PomodoroState,
+} from "./lib/pomodoro";
 
-  constructor(initialState: T) {
-    this.state = initialState;
-  }
+export interface State {
+  running: boolean;
+  skipped: boolean;
+  pomodoro: PomodoroState;
+}
 
-  subscribe(handler) {
-    this.subscriptions.push(handler);
+export default function createStore(durations: Durations) {
+  const pomodoro = makePomodoro(durations);
 
-    return () => {
-      this.subscriptions = this.subscriptions.filter((it) => it !== handler);
-    };
-  }
+  const initialState: State = {
+    running: false,
+    skipped: false,
+    pomodoro: pomodoro.reset(),
+  };
 
-  setState(nextState: T) {
-    const prevState = this.state;
-    this.state = nextState;
-    this.subscriptions.forEach((hanlder) => hanlder(this.state, prevState));
-  }
+  const store = new Store(initialState);
+
+  return {
+    get state() {
+      return store.state;
+    },
+    subscribe(handler) {
+      return store.subscribe(handler);
+    },
+    toggleRunning() {
+      store.setState({
+        ...store.state,
+        running: !store.state.running,
+      });
+    },
+    tick() {
+      if (store.state.running) {
+        store.setState({
+          ...store.state,
+          skipped: false,
+          pomodoro: pomodoro.tick(store.state.pomodoro),
+        });
+      }
+    },
+    skip(phase: Phase) {
+      store.setState({
+        ...store.state,
+        running: true,
+        skipped: true,
+        pomodoro: pomodoro.reset(phase),
+      });
+    },
+  };
 }
