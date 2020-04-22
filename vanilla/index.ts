@@ -3,18 +3,14 @@ import notify from "../common/notify";
 import createStore from "./store";
 import createView from "./view";
 import { onSpacebar } from "../common/utils";
-
-const durations = {
-  [Phase.FOCUS]: 25 * 60,
-  [Phase.SHORT_BREAK]: 5 * 60,
-  [Phase.LONG_BREAK]: 15 * 60,
-};
+import { durations, themeColors } from "../common/config";
 
 function main() {
   const store = createStore(durations);
 
   const view = createView({
     durations,
+    themeColors,
     onPlayPauseButtonClick: () => store.toggleRunning(),
     onFocusButtonClick: () => store.skip(Phase.FOCUS),
     onShotBreakButtonClick: () => store.skip(Phase.SHORT_BREAK),

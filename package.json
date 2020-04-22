@@ -9,7 +9,8 @@
     "build:vanilla": "rm -rf dist && parcel build vanilla/index.html",
     "start:preact": "rm -rf dist && parcel preact/index.html",
     "build:preact": "rm -rf dist && parcel build preact/index.html",
-    "build": "yarn build:preact"
+    "build": "yarn build:preact",
+    "start": "yarn start:preact"
   },
   "dependencies": {
     "preact": "^10.4.1"

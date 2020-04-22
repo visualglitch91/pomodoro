@@ -5,19 +5,8 @@ import pauseIcon from "../common/pause-icon.svg";
 import makePomodoro, { Phase } from "../common/pomodoro";
 import { formatRemaining, times, cx, onSpacebar } from "../common/utils";
 import notify from "../common/notify";
+import { durations, themeColors } from "../common/config";
 import ProgressRing from "./progress-ring";
-
-const durations = {
-  [Phase.FOCUS]: 25 * 60,
-  [Phase.SHORT_BREAK]: 5 * 60,
-  [Phase.LONG_BREAK]: 15 * 60,
-};
-
-const themeColors = {
-  [Phase.FOCUS]: "#e74c3c",
-  [Phase.SHORT_BREAK]: "#3498db",
-  [Phase.LONG_BREAK]: "#27ae60",
-};
 
 const pomodoroUtils = makePomodoro(durations);
 
@@ -66,6 +55,8 @@ function App() {
     ) {
       notify(pomodoro.phase);
     }
+
+    prevPhaseRef.current = pomodoro.phase;
   }, [skipped, pomodoro.phase]);
 
   useEffect(() => {

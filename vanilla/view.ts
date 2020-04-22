@@ -5,20 +5,16 @@ import { $, formatRemaining } from "../common/utils";
 import createProgressRing from "./lib/progress-ring";
 import { State } from "./store";
 
-const themeColors = {
-  [Phase.FOCUS]: "#e74c3c",
-  [Phase.SHORT_BREAK]: "#3498db",
-  [Phase.LONG_BREAK]: "#27ae60",
-};
-
 export default function view({
   durations,
+  themeColors,
   onPlayPauseButtonClick,
   onFocusButtonClick,
   onShotBreakButtonClick,
   onLongBreakButtonClick,
 }: {
   durations: Durations;
+  themeColors: { [P in Phase]: string };
   onPlayPauseButtonClick: () => void;
   onFocusButtonClick: () => void;
   onShotBreakButtonClick: () => void;
