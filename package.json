@@ -5,7 +5,13 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "rm -rf dist && parcel src/index.html",
-    "build": "rm -rf dist && parcel build src/index.html"
+    "start:vanilla": "rm -rf dist && parcel vanilla/index.html",
+    "build:vanilla": "rm -rf dist && parcel build vanilla/index.html",
+    "start:preact": "rm -rf dist && parcel preact/index.html",
+    "build:preact": "rm -rf dist && parcel build preact/index.html",
+    "build": "yarn build:preact"
+  },
+  "dependencies": {
+    "preact": "^10.4.1"
   }
 }

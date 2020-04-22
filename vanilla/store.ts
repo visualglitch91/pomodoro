@@ -3,7 +3,7 @@ import makePomodoro, {
   Phase,
   Durations,
   State as PomodoroState,
-} from "./lib/pomodoro";
+} from "../common/pomodoro";
 
 export interface State {
   running: boolean;

@@ -6,11 +6,6 @@ body {
 body {
   padding: 0;
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   font-family: "Poppins", sans-serif;
   transition: background-color 200ms linear;
 }
@@ -25,6 +20,15 @@ body.short-break {
 
 body.long-break {
   background: #27ae60;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 button {

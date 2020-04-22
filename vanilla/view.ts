@@ -1,24 +1,15 @@
+import playIcon from "../common/play-icon.svg";
+import pauseIcon from "../common/pause-icon.svg";
+import { Phase, Durations } from "../common/pomodoro";
+import { $, formatRemaining } from "../common/utils";
 import createProgressRing from "./lib/progress-ring";
-import { Phase, Durations } from "./lib/pomodoro";
 import { State } from "./store";
-import playIcon from "./play-icon.svg";
-import pauseIcon from "./pause-icon.svg";
 
 const themeColors = {
   [Phase.FOCUS]: "#e74c3c",
   [Phase.SHORT_BREAK]: "#3498db",
   [Phase.LONG_BREAK]: "#27ae60",
 };
-
-function $<T extends Element>(selector: string): T {
-  return document.querySelector(selector);
-}
-
-function formatRemaining(remaining: number) {
-  const minutes = Math.floor(remaining / 60);
-  const seconds = remaining % 60;
-  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-}
 
 export default function view({
   durations,
